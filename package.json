@@ -5,10 +5,14 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "start": "node ."
+    "start": "node .",
+    "dev": "nodemon ."
   },
   "dependencies": {
     "express": "^5.0.0-alpha.8",
     "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }
