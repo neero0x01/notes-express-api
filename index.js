@@ -1,18 +1,13 @@
 import express from 'express'
 import morgan from 'morgan';
+import routes from './routes/index.js'
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(morgan("dev"));
 
-app.get('/', (req, res) => {
-  res.send('hola')
-})
-
-app.get('/error', (req, res) => {
-  throw new Error("oops I made a mistake")
-})
+app.use(routes)
 
 app.use((req,res) => {
   res.status(404).send("Not found");
