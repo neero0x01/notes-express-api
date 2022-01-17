@@ -25,7 +25,7 @@ export const createNote = ({ title, body }) => {
   return { ...note };
 }
 
-export const updateNote = ({ title, body }) => {
+export const updateNote = (id, { title, body }) => {
   if(!NOTES.has(id)) return null
   const note = NOTES.get(id)
   note.title = title ?? note.title
