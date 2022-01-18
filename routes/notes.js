@@ -7,7 +7,7 @@ export const list = (req, res) => {
     return res.status(400).send('Invalid sort params')
   }
   console.log({ sort });
-  const notes = getNotes();
+  const notes = getNotes(sort);
   res.json({notes})
 }
 

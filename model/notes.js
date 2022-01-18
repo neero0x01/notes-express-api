@@ -8,8 +8,16 @@ const NOTES = new Map()
 //   lastEdited: Date
 // }
 
-export const getNotes = () => {
-  return Array.from(NOTES.values())
+export const getNotes = sort => {
+  const notes =  Array.from(NOTES.values())
+  notes.sort((a,b) => {
+    if(sort === 'asc') {
+      return a.lastEdited - b.lastEdited
+    } else {
+      return b.lastEdited - a.lastEdited
+    }
+  })
+  return notes
 }
 
 export const createNote = ({ title, body }) => {
@@ -30,6 +38,7 @@ export const updateNote = (id, { title, body }) => {
   const note = NOTES.get(id)
   note.title = title ?? note.title
   note.body = body ?? note.body
+  note.lastEdited = new Date.now()
   return { ...note }
 }
 
