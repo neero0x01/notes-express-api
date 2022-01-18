@@ -1,5 +1,7 @@
+import MapStore from '../lib/mapstore.js'
 import { v4 as uuid } from 'uuid';
 const NOTES = new Map()
+const store = new MapStore('notes.json')
 
 // Note {
 //   id: string
@@ -7,6 +9,12 @@ const NOTES = new Map()
 //   body: string
 //   lastEdited: Date
 // }
+
+store.read().then(notes => {
+  for (let [id, note] of notes) {
+    NOTES.set(id, note)
+  }
+}).catch(err => console.error(err))
 
 export const getNotes = sort => {
   const notes =  Array.from(NOTES.values())
@@ -20,7 +28,7 @@ export const getNotes = sort => {
   return notes
 }
 
-export const createNote = ({ title, body }) => {
+export const createNote = async ({ title, body }) => {
   const id = uuid()
   const lastEdited = Date.now()
   const note = {
@@ -30,15 +38,17 @@ export const createNote = ({ title, body }) => {
     body
   }
   NOTES.set(id, note)
+  await store.save(NOTES)
   return { ...note };
 }
 
-export const updateNote = (id, { title, body }) => {
+export const updateNote = async (id, { title, body }) => {
   if(!NOTES.has(id)) return null
   const note = NOTES.get(id)
   note.title = title ?? note.title
   note.body = body ?? note.body
-  note.lastEdited = new Date.now()
+  note.lastEdited = Date.now()
+  await store.save(NOTES)
   return { ...note }
 }
 
@@ -48,6 +58,8 @@ export const getNote = (id) => {
   return { ...note }
 }
 
-export const delteNote = (id) => {
-  return NOTES.delete(id)
+export const delteNote = async (id) => {
+  const success = NOTES.delete(id)
+  await store.save(NOTES)
+  return success
 }
